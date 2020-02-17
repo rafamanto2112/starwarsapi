@@ -1,0 +1,27 @@
+version: "3"
+services: 
+  db:
+    image: mongo:4.0.4
+    container_name: mongodb
+    ports: 
+      - 27017:27017
+    restart: always
+    networks:
+      - net-starwars
+  app:
+    restart: always
+    build: .
+    container_name: star-wars-api
+    ports: 
+      - 8095:8084
+    working_dir: /opt/app
+    command: mvn clean spring-boot:run
+    depends_on: 
+      - db
+    links:
+      - db
+    networks:
+      - net-starwars
+networks:
+  net-starwars:
+    driver: bridge

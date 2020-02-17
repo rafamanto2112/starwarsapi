@@ -1,0 +1,28 @@
+version: '3'
+services: 
+  db:
+    image: mongo:4.0.4
+    container_name: mongodb-starwars
+    ports: 
+      - 27017:27017
+    restart: always
+  db-redis:
+    image: redis:5.0.7
+    container_name: redis-starwars
+    ports: 
+      - 6379:6379
+    restart: always
+  webservice:
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    container_name: star-wars-api
+    ports: 
+      - 8095:8084
+    command: mvn clean spring-boot:run
+    depends_on: 
+      - db
+    links:
+      - db
+
